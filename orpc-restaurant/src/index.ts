@@ -72,6 +72,52 @@ async function main() {
   } catch (error: any) {
     console.error("❌ Error:", error.message);
   }
+
+  try {
+    // Add a new menu item (Admin action)
+    const addItemResponse = await appRouter.menu.addMenuItem({
+      name: "Chocolate Shake",
+      price: 180,
+      isAvailable: true,
+    });
+    console.log("✅ Admin Action:", addItemResponse.message);
+
+    // Now, let's try to order the new item to see if it works.
+    const orderResponse = await appRouter.order.placeOrder({
+      itemId: 4, // Assuming this is the ID of the newly added item
+      quantity: 2,
+    });
+    console.log(
+      "✅ Order Placed for Chocolate Shake! ID:",
+      orderResponse.orderId,
+    );
+  } catch (error: any) {
+    console.error("❌ Error:", error.message);
+  }
+
+  try {
+    // 1. Order a Chocolate Shake (ID: 4)
+    const orderResponse = await appRouter.order.placeOrder({
+      itemId: 5,
+      quantity: 3,
+    });
+    console.log("✅ Order Placed! ID:", orderResponse.orderId);
+
+    // 2. Check the order status
+    const status = await appRouter.order.checkOrderStatus({
+      orderId: orderResponse.orderId,
+    });
+
+    console.log("\n--- 📋 Digital Receipt (Output Validated) ---");
+    console.log(`Order ID: ${status.orderId}`);
+
+    console.log(`Status: ${status.status}`);
+    console.log(`Bill: ${status.totalPrice} Taka`);
+  } catch (error: any) {
+    console.error("❌ Error:", error.message);
+  }
+
+  console.log(menu);
 }
 
 main();

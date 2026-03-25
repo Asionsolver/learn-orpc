@@ -11,7 +11,7 @@ export const menuRouter = {
     })
     .callable(),
 
-  // নতুন খাবার যোগ করার API (শুধুমাত্র অ্যাডমিন পারবে)
+  // API to add new food (only admin can)
   addMenuItem: adminProcedure
     .input(
       z.object({
@@ -21,18 +21,17 @@ export const menuRouter = {
       }),
     )
     .handler(async ({ input, context }) => {
-      // এখানে ctx রিসিভ করা হচ্ছে
-      console.log(`Action performed by: ${context.user.name}`); // এখন আর এরর দিবে না
+      console.log(`Action performed by: ${context.user.name}`);
       const newItem = {
         id: menuItems.length + 1,
         ...input,
       };
 
-      menuItems.push(newItem); // ডাটাবেজে নতুন আইটেম সেভ হলো
+      menuItems.push(newItem);
 
       return {
         success: true,
-        message: `${input.name} সফলভাবে মেন্যুতে যুক্ত করা হয়েছে!`,
+        message: `${input.name} Successfully added to the menu!`,
         item: newItem,
       };
     })
